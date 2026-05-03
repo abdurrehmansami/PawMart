@@ -10,8 +10,16 @@ export const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
-
   const product = PRODUCTS.find(p => p.id === id);
+  const [imgSrc, setImgSrc] = useState(product?.image || '');
+
+  React.useEffect(() => {
+    if (product) setImgSrc(product.image);
+  }, [product]);
+
+  const handleImageError = () => {
+    setImgSrc('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800&auto=format&fit=crop');
+  };
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
@@ -46,15 +54,16 @@ export const ProductDetail = () => {
           >
             <div className="rounded-[2.5rem] overflow-hidden bg-gray-50 aspect-square shadow-xl border border-gray-100">
                <img 
-                 src={product.image} 
+                 src={imgSrc} 
                  alt={product.name} 
+                 onError={handleImageError}
                  className="w-full h-full object-cover"
                />
             </div>
             <div className="grid grid-cols-4 gap-4">
                {[1, 2, 3, 4].map((i) => (
                  <div key={i} className="aspect-square rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden cursor-pointer hover:border-[#FF6B35] transition-colors">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover opacity-50 hover:opacity-100 transition-opacity" />
+                    <img src={imgSrc} alt={product.name} className="w-full h-full object-cover opacity-50 hover:opacity-100 transition-opacity" />
                  </div>
                ))}
             </div>

@@ -11,6 +11,11 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
+  const [imgSrc, setImgSrc] = React.useState(product.image);
+
+  const handleImageError = () => {
+    setImgSrc('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800&auto=format&fit=crop');
+  };
 
   return (
     <motion.div
@@ -19,8 +24,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden">
         <img
-          src={product.image}
+          src={imgSrc}
           alt={product.name}
+          onError={handleImageError}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         {product.stockStatus === 'Low Stock' && (
